@@ -205,8 +205,9 @@ int main( int argc, char** argv )
 		cvShowImage( "Processed", processed );
 		
 		// Wait until a key is pressed to continue... 	
-		tecla = cvWaitKey(0);
+	
 	}
+	tecla = cvWaitKey(0);
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -321,8 +322,9 @@ int main( int argc, char** argv )
 		cvShowImage( "Processed", processed );
 		
 		// Wait until a key is pressed to continue... 	
-		tecla = cvWaitKey(0);
+	
 	}
+	tecla = cvWaitKey(0);
 
 	cvReleaseImage(&img);
 	cvDestroyWindow("Original");
