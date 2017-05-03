@@ -161,10 +161,10 @@ int main( int argc, char** argv )
 				
 				// Detect and count the number of white pixels (just a dummy feature...)
 				// Verify if the pixels have a given value ( White, defined as R[253-255], G[253-255], B[253-255] ). If so, count it...
-				if ( blue >= 253 && green >= 253 && red >= 253 )
-				{
-					fWhite++;
-				}
+				if ( blue >= 9 && blue <= 65 green <= 95 && green >= 60 && red >= 125 && red <= 175 )
+            {
+               fWhite++;
+            }
 				
 				// Here you can add your own features....... Good luck
 				
