@@ -25,6 +25,22 @@
 // Bart Valid: 54 items: bart116.bmp - bart169.bmp
 // Homer Valid: 37 items: homer88.bmp - homer124.bmp
 
+int matchPrim1(unsigned char red, unsigned char green, unsigned char blue) {
+	return 11 <= blue && blue <= 22 && 85 <= green && green <= 105 && 240 <= red && red <= 255;
+}
+
+int matchPrim2(unsigned char red, unsigned char green, unsigned char blue) {
+	return 9 <= red && red <= 90 && 60 <= green && green <= 125 && 125 <= blue && blue <= 175;
+}
+
+int matchPrim3(unsigned char red, unsigned char green, unsigned char blue) {
+	return 180 <= red && red <= 212 && 150 <= green && green <= 185 && 96 <= blue && blue <= 150;
+}
+
+int matchPrim4(unsigned char red, unsigned char green, unsigned char blue) {
+	return 85 <= red && red <= 100 && 130 <= green && green <= 200 && 40 <= blue && blue <= 70;
+}
+
 // MAIN
 int main( int argc, char** argv )   
 {
@@ -50,7 +66,9 @@ int main( int argc, char** argv )
 
 	// Feature variables
 	float fOrange;
-	float fWhite;
+	float fBlue;
+	float fGray;
+	float fGreen;
 
 	// Variable filename
 	static char cFileName[ 50 ] = {'\0'};
@@ -125,11 +143,13 @@ int main( int argc, char** argv )
 
 		// Make a image clone and store it at processed and threshold
 		processed 	= cvCloneImage( img );
-		threshold  		= cvCloneImage( img );
+		threshold  	= cvCloneImage( img );
 
 		// Initialize variables with zero 
 		fOrange 	= 0.0;
-		fWhite 	= 0.0;
+		fBlue 	= 0.0;
+		fGray    = 0.0;
+		fGreen	= 0.0;
 
 		// Loop that reads each image pixel
 		for( h = 0; h < img->height; h++ ) // rows
@@ -139,7 +159,7 @@ int main( int argc, char** argv )
 				// Read each channel and writes it into the blue, green and red variables. Notice that OpenCV considers BGR
 				blue  	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 0 ];
 				green 	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 1 ];
-				red   		= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 2 ];
+				red   	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 2 ];
 
 				// Shows the pixel value at the screenl
 				//printf( "pixel[%d][%d]= %d %d %d \n", h, w, (int)blue, (int)green, (int)red );
@@ -148,7 +168,7 @@ int main( int argc, char** argv )
 				
 				// Detect and count the number of orange pixels
 				// Verify if the pixels have a given value ( Orange, defined as R[240-255], G[85-105], B[11-22] ). If so, count it...
-				if ( blue>=11 && blue<=22 && green>=85 && green<=105 &&  red>=240 && red<=255 )
+				if ( matchPrim1( red, green, blue ) )
 				{
 					fOrange++;
 				
@@ -161,12 +181,21 @@ int main( int argc, char** argv )
 				
 				// Detect and count the number of white pixels (just a dummy feature...)
 				// Verify if the pixels have a given value ( White, defined as R[253-255], G[253-255], B[253-255] ). If so, count it...
-				if ( blue >= 253 && green >= 253 && red >= 253 )
-				{
-					fWhite++;
-				}
+				if ( matchPrim2( red, green, blue ) )
+            {
+               fBlue++;
+            }
 				
 				// Here you can add your own features....... Good luck
+            if ( matchPrim3( red, green, blue ) )
+            {
+            	fGray++;
+            }
+
+            if ( matchPrim4 (red, green, blue ) )
+            {
+            	fGreen++;
+            }
 				
 			}
 		}
@@ -175,21 +204,27 @@ int main( int argc, char** argv )
 		// Compute the percentage of pixels of a given colour.
 		// Normalize the feature by the image size
 		fOrange 	= fOrange / ( (int)img->height * (int)img->width );
-		fWhite  	= fWhite  / ( (int)img->height * (int)img->width );
+		fBlue  	= fBlue   / ( (int)img->height * (int)img->width );
+		fGray  	= fGray   / ( (int)img->height * (int)img->width );
+		fGreen  	= fGreen  / ( (int)img->height * (int)img->width );
 
 		// Store the feature value in the columns of the feature (matrix) vector
 		fVector[iNum][1] = fOrange;
-		fVector[iNum][2] = fWhite;
+		fVector[iNum][2] = fBlue;
+		fVector[iNum][3] = fGray;
+		fVector[iNum][4] = fGreen;
 		
 		// Here you can add more features to your feature vector by filling the other columns: fVector[iNum][3] = ???; fVector[iNum][4] = ???;
 		
 		// Shows the feature vector at the screen
-		printf( "\n%d %f %f", iNum, fVector[iNum][1], fVector[iNum][2] );
+		printf( "\n%d %f %f, %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4] );
 		//printf( "\n%d %f %f %f %f %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5] );
 
 		// And finally, store your features in a file
 		fprintf( fp, "%f,", fVector[iNum][1]);
 		fprintf( fp, "%f,", fVector[iNum][2]);
+		fprintf( fp, "%f,", fVector[iNum][3]);
+		fprintf( fp, "%f,", fVector[iNum][4]);
 		//fprintf( fp, "%f,", fVector[iNum][3]);
 		//fprintf( fp, "%f,", fVector[iNum][4]);
 		//fprintf( fp, "%f,", fVector[iNum][5]);
@@ -247,7 +282,9 @@ int main( int argc, char** argv )
 
 		// Initialize variables with zero 
 		fOrange 	= 0.0;
-		fWhite 	= 0.0;
+		fBlue 	= 0.0;
+		fGray		= 0.0;
+		fGreen 	= 0.0;
 
 		// Loop that reads each image pixel
 		for( h = 0; h < img->height; h++ ) // rows
@@ -257,7 +294,7 @@ int main( int argc, char** argv )
 				// Read each channel and writes it into the blue, green and red variables. Notice that OpenCV considers BGR
 				blue  	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 0 ];
 				green 	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 1 ];
-				red   		= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 2 ];
+				red   	= ( (uchar *)(img->imageData + h*img->widthStep) )[ w*img->nChannels + 2 ];
 
 				// Shows the pixel value at the screenl
 				//printf( "pixel[%d][%d]= %d %d %d \n", h, w, (int)blue, (int)green, (int)red );
@@ -266,7 +303,7 @@ int main( int argc, char** argv )
 				
 				// Detect and count the number of orange pixels
 				// Verify if the pixels have a given value ( Orange, defined as R[240-255], G[85-105], B[11-22] ). If so, count it...
-				if ( blue>=11 && blue<=22 && green>=85 && green<=105 &&  red>=240 && red<=255 )
+				if ( matchPrim1( red, green, blue ) )
 				{
 					fOrange++;
 				
@@ -279,13 +316,21 @@ int main( int argc, char** argv )
 				
 				// Detect and count the number of white pixels (just a dummy feature...)
 				// Verify if the pixels have a given value ( White, defined as R[253-255], G[253-255], B[253-255] ). If so, count it...
-				if ( blue >= 253 && green >= 253 && red >= 253 )
-				{
-					fWhite++;
-				}
+				if ( matchPrim2( red, green, blue ) )
+            {
+               fBlue++;
+            }
 				
 				// Here you can add your own features....... Good luck
-				
+				if ( matchPrim3( red, green, blue ) )
+            {
+               fGray++;
+            }
+
+            if ( matchPrim4( red, green, blue ) )
+            {
+            	fGreen++;
+            }
 			}
 		}
 
@@ -293,21 +338,27 @@ int main( int argc, char** argv )
 		// Compute the percentage of pixels of a given colour.
 		// Normalize the feature by the image size
 		fOrange 	= fOrange / ( (int)img->height * (int)img->width );
-		fWhite  	= fWhite  / ( (int)img->height * (int)img->width );
+		fBlue  	= fBlue   / ( (int)img->height * (int)img->width );
+		fGray  	= fGray   / ( (int)img->height * (int)img->width );
+		fGreen  	= fGreen  / ( (int)img->height * (int)img->width );
 
 		// Store the feature value in the columns of the feature (matrix) vector
 		fVector[iNum][1] = fOrange;
-		fVector[iNum][2] = fWhite;
+		fVector[iNum][2] = fBlue;
+		fVector[iNum][3] = fGray;
+		fVector[iNum][4] = fGreen;
 		
 		// Here you can add more features to your feature vector by filling the other columns: fVector[iNum][3] = ???; fVector[iNum][4] = ???;
 		
 		// Shows the feature vector at the screen
-		printf( "\n%d %f %f", iNum, fVector[iNum][1], fVector[iNum][2] );
+		printf( "\n%d %f %f %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4] );
 		//printf( "\n%d %f %f %f %f %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5] );
 
 		// And finally, store your features in a file
 		fprintf( fp, "%f,", fVector[iNum][1]);
 		fprintf( fp, "%f,", fVector[iNum][2]);
+		fprintf( fp, "%f,", fVector[iNum][3]);
+		fprintf( fp, "%f,", fVector[iNum][4]);
 		//fprintf( fp, "%f,", fVector[iNum][3]);
 		//fprintf( fp, "%f,", fVector[iNum][4]);
 		//fprintf( fp, "%f,", fVector[iNum][5]);
