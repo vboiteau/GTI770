@@ -1,6 +1,26 @@
 #!/bin/bash
+if [ -z $1 ]; then
+    echo "Parameter #1: must be either HB, HBL, HBLO";
+fi
+relation="Homer-Bart"
+classes="Homer, Bart"
+features="orange blanc gris vert bleu"
+if [[ $1 == "HBL" ]];then
+    relation="Homer-Bart-Lisa"
+    classes="Homer, Bart, Lisa"
+    features="orange blanc gris vert bleu rouge"
+elif [[ $1 == "HBLO" ]];then
+    relation="Homer-Bart-Lisa"
+    classes="Homer, Bart, Lisa, Others"
+    features="orange blanc gris vert bleu rouge"
+fi
 
-echo -e "@relation Homer-Bart\n@attribute primitive_orange numeric\n@attribute primitive_blanc numeric\n@attribute primitive_gris numeric\n@attribute primitive_vert numeric\n@attribute primitive_bleu numeric\n@attribute classe {Homer, Bart}\n@data\n$(cat apprentissage-homer-bart.txt)" > apprentissage-homer-bart.arff
-echo -e "@relation Homer-Bart\n@attribute primitive_orange numeric\n@attribute primitive_blanc numeric\n@attribute primitive_gris numeric\n@attribute primitive_vert numeric\n@attribute primitive_bleu numeric\n@attribute classe {Homer, Bart}\n@data\n$(cat validation-homer-bart.txt)" > validation-homer-bart.arff
-echo -e "@relation Homer-Bart\n@attribute primitive_orange numeric\n@attribute primitive_blanc numeric\n@attribute primitive_gris numeric\n@attribute primitive_vert numeric\n@attribute primitive_bleu numeric\n@attribute primitive_rouge numeric\n@attribute classe {Homer, Bart, Lisa}\n@data\n$(cat apprentissage-homer-bart-lisa.txt)" > apprentissage-homer-bart-lisa.arff
-echo -e "@relation Homer-Bart\n@attribute primitive_orange numeric\n@attribute primitive_blanc numeric\n@attribute primitive_gris numeric\n@attribute primitive_vert numeric\n@attribute primitive_bleu numeric\n@attribute primitive_rouge numeric\n@attribute classe {Homer, Bart, Lisa}\n@data\n$(cat validation-homer-bart-lisa.txt)" > validation-homer-bart-lisa.arff
+header="@relation $relation\n"
+for feature in $features ; do header="$header@attribute primitive_$feature numeric\n"; done
+
+header="$header@attribute classe {$classes}\n@data\n"
+
+echo $header
+
+echo -e "$header$(cat EquipeI-Apprentissage-$1.txt)" > EquipeI-Apprentissage-$1.arff
+echo -e "$header$(cat EquipeI-Validation-$1.txt)" > EquipeI-Validation-$1.arff

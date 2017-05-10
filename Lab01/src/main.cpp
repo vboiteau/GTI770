@@ -6,6 +6,9 @@
 *
 * EXEMPLE 1: Feature extraction from RGB images
 *                       Simpsons Family
+*
+* USAGE:
+* make;./main {HB,HBL,HBLO};./build-arff {HB, HBL, HBLO}                     
 **/
 
 // INCLUDES
@@ -17,7 +20,7 @@
 
 
 // DEFINES
-#define NUM_SAMPLES 100
+#define NUM_SAMPLES 200
 #define NUM_FEATURES 7
 
 // Bart Train: 80 items: bart1.bmp - bart80.bmp
@@ -104,7 +107,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		// Build the image filename and path to read from disk
 		sprintf ( cFileName, cImageName, (int)(iNum) );
 		//sprintf ( cFileName, "Valid/homer%d.bmp", (int)(iNum) ); 
-		printf ( " %s\n", cFileName);
+		//printf ( " %s\n", cFileName);
 
 		// Load the image from disk to the structure img.
 		// 1  - Load a 3-channel image (color)
@@ -245,7 +248,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		// Here you can add more features to your feature vector by filling the other columns: fVector[iNum][3] = ???; fVector[iNum][4] = ???;
 		
 		// Shows the feature vector at the screen
-		printf( "\n%d %f %f, %f, %f, %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5], fVector[iNum][6]);
+		//printf( "\n%d %f %f, %f, %f, %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5], fVector[iNum][6]);
 		//printf( "\n%d %f %f %f %f %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5] );
 
 		// And finally, store your features in a file
@@ -284,22 +287,30 @@ int main( int argc, char** argv )
 	// Feature vector [rows] [columns]
 	// In fact it is a "matrix of features"
 	float fVector[ NUM_SAMPLES ][ NUM_FEATURES ];
-    int fileToGenerate = 1;
+    int fileToGenerate = 0;
+
+    const char* HBL = "HBL";
+    const char* HBLO = "HBLO";
+
+    if (strcmp(argv[1], HBL) == 0) {
+       fileToGenerate = 1;
+    } else if(strcmp(argv[1], HBLO) == 0) {
+       fileToGenerate = 2;
+    }
 
 	// Variable filename
 	static char cFileName[ 50 ] = {'\0'};
-	FILE *fp;
-	
-	// Open a text file to store the feature vectors
-    if(fileToGenerate == 0) {
-        fp = fopen ("apprentissage-homer-bart.txt","w");
-    } else if(fileToGenerate == 1) {
-        fp = fopen ("apprentissage-homer-bart-lisa.txt","w");
-    }
-	// fp = fopen ("validation-homer-bart.txt","w");
+    static char fTrainName[50] = {'\0'};
+    static char errorMsg[100] = {'\0'};
+    
+    sprintf(fTrainName,"EquipeI-Apprentissage-%s.txt",argv[1]);
 
-	if(fp == NULL) {
-		perror("failed to open apprentissage-homer-bart.txt");
+    FILE *fTrain;
+    fTrain = fopen (fTrainName,"w");
+	
+	if(fTrain == NULL) {
+        sprintf(errorMsg,"failed to open %s", fTrainName);
+		perror(errorMsg);
 		// perror("failed to open validation-homer-bart.txt");
 		return EXIT_FAILURE;
 	}
@@ -330,7 +341,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fp, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fTrain, img, processed, fileToGenerate);
 	
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -343,7 +354,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fp, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fTrain, img, processed, fileToGenerate);
 
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -357,22 +368,45 @@ int main( int argc, char** argv )
 
 	// Take all the image files at the range
     if (fileToGenerate > 0) {
-        processCharacter(fVector, cFileName, "Train/lisa%d.bmp", "Lisa", 33, fp, img, processed, fileToGenerate);
+        processCharacter(fVector, cFileName, "Train/lisa%d.bmp", "Lisa", 33, fTrain, img, processed, fileToGenerate);
+    }
+    // *****************************************************************************************************************************************
+    // *****************************************************************************************************************************************
+    // *****************************************************************************************************************************************
+    // TRAINING SAMPLES 
+    // OTHERS 
+    // Others Train: 121 items: other1.bmp - other121.bmp
+    // The code below is exactly the same for HOMER, except that we have changed the values of iNum and Homer -> Others
+    // along the file
+    // *****************************************************************************************************************************************
+
+    // Take all the image files at the range
+    if (fileToGenerate == 2) {
+        processCharacter(fVector, cFileName, "Train/other%d.bmp", "Others", 121, fTrain, img, processed, fileToGenerate);
     }
 
-	cvReleaseImage(&img);
-	cvDestroyWindow("Original");
+    cvReleaseImage(&img);
+    cvDestroyWindow("Original");
 
-	cvReleaseImage(&processed);
-	cvDestroyWindow("Processed");
+    cvReleaseImage(&processed);
+    cvDestroyWindow("Processed");
 
-	fclose(fp);
+	fclose(fTrain);
+    static char fValidationName[50] = {'\0'};
+    
+    sprintf(fValidationName,"EquipeI-Validation-%s.txt",argv[1]);
 
-    if(fileToGenerate == 0) {
-        fp = fopen ("validation-homer-bart.txt","w");
-    } else if(fileToGenerate == 1) {
-        fp = fopen ("validation-homer-bart-lisa.txt","w");
-    }
+    FILE *fValidation;
+
+    fValidation = fopen (fValidationName, "w");
+
+	if(fValidation == NULL) {
+        sprintf(errorMsg,"failed to open %s", fValidationName);
+		perror(errorMsg);
+		// perror("failed to open validation-homer-bart.txt");
+		return EXIT_FAILURE;
+	}
+
     
 	// *****************************************************************************************************************************************
 	// VALIDATION SAMPLES 
@@ -381,7 +415,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Valid/homer%d.bmp", "Homer", 37, fp, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Valid/homer%d.bmp", "Homer", 37, fValidation, img, processed, fileToGenerate);
 	
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -394,7 +428,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Valid/bart%d.bmp", "Bart", 54, fp, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Valid/bart%d.bmp", "Bart", 54, fValidation, img, processed, fileToGenerate);
 
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -408,16 +442,31 @@ int main( int argc, char** argv )
 
 	// Take all the image files at the range
     if (fileToGenerate > 0) {
-        processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fp, img, processed, fileToGenerate);
+        printf("lisa: %d\n", fileToGenerate);
+        processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fValidation, img, processed, fileToGenerate);
+    }
+    // *****************************************************************************************************************************************
+    // VALIDATION SAMPLES 
+    // Other 
+    // Other Validate: 49 items: other1.bmp - other49.bmp
+    // The code below is exactly the same for HOMER, except that we have changed the values of iNum and Homer -> Other
+    // along the file
+    // *****************************************************************************************************************************************
+
+    // Take all the image files at the range
+    if (fileToGenerate == 2) {
+        processCharacter(fVector, cFileName, "Valid/other%d.bmp", "Others", 49, fValidation, img, processed, fileToGenerate);
     }
 
-	cvReleaseImage(&img);
-	cvDestroyWindow("Original");
+    cvReleaseImage(&img);
+    cvDestroyWindow("Original");
 
-	cvReleaseImage(&processed);
-	cvDestroyWindow("Processed");
+    cvReleaseImage(&processed);
+    cvDestroyWindow("Processed");
+    
+	fclose(fValidation);
 
-	fclose(fp);
+    printf("end: %d\n", fileToGenerate);
 
 	return 0;
 } 

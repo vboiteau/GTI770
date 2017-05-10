@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ -z $1 ]; then
+    echo "Parameter #1: must be either HB, HBL, HBLO";
+fi
+
+make && ./main $1 && ./build-arff $1
