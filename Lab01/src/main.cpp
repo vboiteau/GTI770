@@ -18,7 +18,7 @@
 
 // DEFINES
 #define NUM_SAMPLES 100
-#define NUM_FEATURES 6
+#define NUM_FEATURES 7
 
 // Bart Train: 80 items: bart1.bmp - bart80.bmp
 // Homer Train 62 items: homer1.bmp - homer62.bmp
@@ -42,12 +42,17 @@ int matchPrim3(unsigned char red, unsigned char green, unsigned char blue) {
 
 // green
 int matchPrim4(unsigned char red, unsigned char green, unsigned char blue) {
-	return 85 <= red && red <= 100 && 130 <= green && green <= 200 && 40 <= blue && blue <= 70;
+	return 80 <= red && red <= 100 && 130 <= green && green <= 200 && 20 <= blue && blue <= 50;
 }
 
 // blue
 int matchPrim5(unsigned char red, unsigned char green, unsigned char blue) {
 	return 9 <= red && red <= 90 && 60 <= green && green <= 125 && 125 <= blue && blue <= 175;
+}
+
+// red 
+int matchPrim6(unsigned char red, unsigned char green, unsigned char blue) {
+	return 254 <= red && red <= 255 && 0 <= green && green <= 1 && 0 <= blue && blue <= 1;
 }
 
 int matchBorder(unsigned char red, unsigned char green, unsigned char blue) {
@@ -61,7 +66,8 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 							 int count, 
 							 FILE *fp,
 							 IplImage *img,
-							 IplImage *processed)
+							 IplImage *processed,
+                             int fileToGenerate)
 {
 	// OpenCV variables related to the image structure.
 	// IplImage structure contains several information of the image (See OpenCV manual).	
@@ -91,6 +97,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 	float fGray;
 	float fGreen;
 	float fBlue;
+	float fRed;
 
 	for ( iNum = 1; iNum <= count; iNum++ )
 	{
@@ -124,6 +131,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fGray    = 0.0;
 		fGreen	= 0.0;
 		fBlue 	= 0.0;
+        fRed = 0.0;
 
 		int borderPixels = 0;
 
@@ -204,6 +212,11 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
             {
                fBlue++;
             }
+
+            if ( matchPrim6( red, green, blue ) )
+            {
+               fRed++;
+            }
 				
 			}
 			borderPixels += leftBorderPixels + rightBorderPixels;
@@ -219,6 +232,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fGray  	= fGray   / ( (int)img->height * (int)img->width - borderPixels);
 		fGreen  	= fGreen  / ( (int)img->height * (int)img->width - borderPixels);
 		fBlue  	= fBlue   / ( (int)img->height * (int)img->width - borderPixels);
+		fRed  	= fRed   / ( (int)img->height * (int)img->width - borderPixels);
 
 		// Store the feature value in the columns of the feature (matrix) vector
 		fVector[iNum][1] = fOrange;
@@ -226,11 +240,12 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fVector[iNum][3] = fGray;
 		fVector[iNum][4] = fGreen;
 		fVector[iNum][5] = fBlue;
+		fVector[iNum][6] = fRed;
 		
 		// Here you can add more features to your feature vector by filling the other columns: fVector[iNum][3] = ???; fVector[iNum][4] = ???;
 		
 		// Shows the feature vector at the screen
-		printf( "\n%d %f %f, %f, %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5]);
+		printf( "\n%d %f %f, %f, %f, %f, %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5], fVector[iNum][6]);
 		//printf( "\n%d %f %f %f %f %f", iNum, fVector[iNum][1], fVector[iNum][2], fVector[iNum][3], fVector[iNum][4], fVector[iNum][5] );
 
 		// And finally, store your features in a file
@@ -239,6 +254,9 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fprintf( fp, "%f,", fVector[iNum][3]);
 		fprintf( fp, "%f,", fVector[iNum][4]);
 		fprintf( fp, "%f,", fVector[iNum][5]);
+        if (fileToGenerate > 0) {
+            fprintf( fp, "%f,", fVector[iNum][6]);
+        }
 		
 		// IMPORTANT
 		// Do not forget the label.... 	
@@ -253,7 +271,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		// Wait until a key is pressed to continue... 	
 	
 	}
-	tecla = cvWaitKey(0);
+	//tecla = cvWaitKey(0);
 }
 
 // MAIN
@@ -266,13 +284,18 @@ int main( int argc, char** argv )
 	// Feature vector [rows] [columns]
 	// In fact it is a "matrix of features"
 	float fVector[ NUM_SAMPLES ][ NUM_FEATURES ];
+    int fileToGenerate = 1;
 
 	// Variable filename
 	static char cFileName[ 50 ] = {'\0'};
 	FILE *fp;
 	
 	// Open a text file to store the feature vectors
-	fp = fopen ("apprentissage-homer-bart.txt","w");
+    if(fileToGenerate == 0) {
+        fp = fopen ("apprentissage-homer-bart.txt","w");
+    } else if(fileToGenerate == 1) {
+        fp = fopen ("apprentissage-homer-bart-lisa.txt","w");
+    }
 	// fp = fopen ("validation-homer-bart.txt","w");
 
 	if(fp == NULL) {
@@ -307,7 +330,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fp, img, processed);
+	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fp, img, processed, fileToGenerate);
 	
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -320,7 +343,73 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fp, img, processed);
+	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fp, img, processed, fileToGenerate);
+
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// TRAINING SAMPLES 
+	// LISA 
+	// Lisa Train: 33 items: lisa1.bmp - lisa33.bmp
+	// The code below is exactly the same for HOMER, except that we have changed the values of iNum and Homer -> Lisa
+	// along the file
+	// *****************************************************************************************************************************************
+
+	// Take all the image files at the range
+    if (fileToGenerate > 0) {
+        processCharacter(fVector, cFileName, "Train/lisa%d.bmp", "Lisa", 33, fp, img, processed, fileToGenerate);
+    }
+
+	cvReleaseImage(&img);
+	cvDestroyWindow("Original");
+
+	cvReleaseImage(&processed);
+	cvDestroyWindow("Processed");
+
+	fclose(fp);
+
+    if(fileToGenerate == 0) {
+        fp = fopen ("validation-homer-bart.txt","w");
+    } else if(fileToGenerate == 1) {
+        fp = fopen ("validation-homer-bart-lisa.txt","w");
+    }
+    
+	// *****************************************************************************************************************************************
+	// VALIDATION SAMPLES 
+	// HOMER
+	// Homer Validate 37 items: homer1.bmp - homer37.bmp
+	// *****************************************************************************************************************************************
+
+	// Take all the image files at the range
+	processCharacter(fVector, cFileName, "Valid/homer%d.bmp", "Homer", 37, fp, img, processed, fileToGenerate);
+	
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// VALIDATION SAMPLES 
+	// BART
+	// Bart Validate: 54 items: bart1.bmp - bart54.bmp
+	// The code below is exactly the same for HOMER, except that we have changed the values of iNum and Homer -> Bart
+	// along the file
+	// *****************************************************************************************************************************************
+
+	// Take all the image files at the range
+	processCharacter(fVector, cFileName, "Valid/bart%d.bmp", "Bart", 54, fp, img, processed, fileToGenerate);
+
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// *****************************************************************************************************************************************
+	// VALIDATION SAMPLES 
+	// LISA 
+	// Lisa Validate: 13 items: lisa1.bmp - lisa13.bmp
+	// The code below is exactly the same for HOMER, except that we have changed the values of iNum and Homer -> Lisa
+	// along the file
+	// *****************************************************************************************************************************************
+
+	// Take all the image files at the range
+    if (fileToGenerate > 0) {
+        processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fp, img, processed, fileToGenerate);
+    }
 
 	cvReleaseImage(&img);
 	cvDestroyWindow("Original");
