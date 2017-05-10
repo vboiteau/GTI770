@@ -20,7 +20,5 @@ for feature in $features ; do header="$header@attribute primitive_$feature numer
 
 header="$header@attribute classe {$classes}\n@data\n"
 
-echo $header
-
 echo -e "$header$(cat EquipeI-Apprentissage-$1.txt)" > EquipeI-Apprentissage-$1.arff
 echo -e "$header$(cat EquipeI-Validation-$1.txt)" > EquipeI-Validation-$1.arff

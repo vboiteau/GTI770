@@ -1,0 +1,6 @@
+#!/bin/bash
+for job in HB HBL HBLO ; do
+    echo "start $job"
+    ./build $job
+    echo "finished $job"
+done

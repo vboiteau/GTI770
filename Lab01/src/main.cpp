@@ -442,7 +442,6 @@ int main( int argc, char** argv )
 
 	// Take all the image files at the range
     if (fileToGenerate > 0) {
-        printf("lisa: %d\n", fileToGenerate);
         processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fValidation, img, processed, fileToGenerate);
     }
     // *****************************************************************************************************************************************
@@ -466,7 +465,6 @@ int main( int argc, char** argv )
     
 	fclose(fValidation);
 
-    printf("end: %d\n", fileToGenerate);
 
 	return 0;
 } 
