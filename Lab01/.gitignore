@@ -2,3 +2,5 @@ main
 !src/main.cpp
 apprentissage-homer-bart.txt
 apprentissage-homer-bart.arff
+.DS_Store
+Thumbs.db

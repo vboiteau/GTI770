@@ -307,3 +307,7 @@ compile_commands.json
 CTestTestfile.cmake
 
 # End of https://www.gitignore.io/api/cmake
+
+# .DS_Store
+.DS_Store
+
