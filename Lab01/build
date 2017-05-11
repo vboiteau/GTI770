@@ -1,6 +1,13 @@
 #!/bin/bash
-if [ -z $1 ]; then
-    echo "Parameter #1: must be either HB, HBL, HBLO";
+doBuild(){
+    make && ./main $1 && ./build-arff $1
+}
+if [ $1 ]; then
+    doBuild $1
+else
+   select context in HB HBL HBLO; do
+       doBuild $context
+       exit
+   done
 fi
 
-make && ./main $1 && ./build-arff $1

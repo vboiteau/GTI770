@@ -303,7 +303,7 @@ int main( int argc, char** argv )
     static char fTrainName[50] = {'\0'};
     static char errorMsg[100] = {'\0'};
     
-    sprintf(fTrainName,"EquipeI-Apprentissage-%s.txt",argv[1]);
+    sprintf(fTrainName,"Output/EquipeI-Apprentissage-%s.txt",argv[1]);
 
     FILE *fTrain;
     fTrain = fopen (fTrainName,"w");
@@ -394,7 +394,7 @@ int main( int argc, char** argv )
 	fclose(fTrain);
     static char fValidationName[50] = {'\0'};
     
-    sprintf(fValidationName,"EquipeI-Validation-%s.txt",argv[1]);
+    sprintf(fValidationName,"Output/EquipeI-Validation-%s.txt",argv[1]);
 
     FILE *fValidation;
 
