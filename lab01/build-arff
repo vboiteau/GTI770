@@ -2,23 +2,36 @@
 if [ -z $1 ]; then
     echo "Parameter #1: must be either HB, HBL, HBLO";
 fi
+
+# 1) init headers attribute
 relation="Homer-Bart"
 classes="Homer, Bart"
 features="orange blanc gris vert bleu"
+outputFolder="Output/"
+equipeNo="I"
+
 if [[ $1 == "HBL" ]];then
-    relation="Homer-Bart-Lisa"
-    classes="Homer, Bart, Lisa"
-    features="orange blanc gris vert bleu rouge"
+    relation="$realtion-Lisa"
+    classes="$classes, Lisa"
+    features="$features rouge"
 elif [[ $1 == "HBLO" ]];then
-    relation="Homer-Bart-Lisa"
-    classes="Homer, Bart, Lisa, Others"
-    features="orange blanc gris vert bleu rouge"
+    relation="$realtion-Lisa-Others"
+    classes="$classes, Lisa, Others"
+    features="$features rouge"
 fi
 
+# 2) build header
 header="@relation $relation\n"
-for feature in $features ; do header="$header@attribute primitive_$feature numeric\n"; done
+
+for feature in $features ; do
+    header="$header@attribute primitive_$feature numeric\n"
+done
 
 header="$header@attribute classe {$classes}\n@data\n"
 
-echo -e "$header$(cat EquipeI-Apprentissage-$1.txt)" > EquipeI-Apprentissage-$1.arff
-echo -e "$header$(cat EquipeI-Validation-$1.txt)" > EquipeI-Validation-$1.arff
+
+# 3) Concat $headers in file
+for task in Apprentissage Validation ; do
+    outputFile=${outputFolder}Equipe${equipeNo}-$task-$1
+    echo -e "$header$(cat $outputFile.txt)" > $outputFile.arff
+done
