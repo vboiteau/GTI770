@@ -101,6 +101,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 	float fGreen;
 	float fBlue;
 	float fRed;
+	float fOthers;
 
 	for ( iNum = 1; iNum <= count; iNum++ )
 	{
@@ -129,12 +130,13 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		threshold  	= cvCloneImage( img );
 
 		// Initialize variables with zero 
-		fOrange 	= 0.0;
+		fOrange = 0.0;
 		fWhite 	= 0.0;
-		fGray    = 0.0;
+		fGray   = 0.0;
 		fGreen	= 0.0;
 		fBlue 	= 0.0;
-        fRed = 0.0;
+        fRed    = 0.0;
+		fOthers = 0.0;
 
 		int borderPixels = 0;
 
@@ -197,29 +199,34 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 				// Verify if the pixels have a given value ( White, defined as R[253-255], G[253-255], B[253-255] ). If so, count it...
 
 				if ( matchPrim2( red, green, blue ) )
-            {
-               fWhite++;
-            }
-				// Here you can add your own features....... Good luck
-            if ( matchPrim3( red, green, blue ) )
-            {
-            	fGray++;
-            }
+				{
+				   fWhite++;
+				}
+					// Here you can add your own features....... Good luck
+				if ( matchPrim3( red, green, blue ) )
+				{
+            		fGray++;
+				}
 
-            if ( matchPrim4 (red, green, blue ) )
-            {
-            	fGreen++;
-            }
+				if ( matchPrim4 (red, green, blue ) )
+				{
+            		fGreen++;
+				}
 
-            if ( matchPrim5( red, green, blue ) )
-            {
-               fBlue++;
-            }
+				if ( matchPrim5( red, green, blue ) )
+				{
+				   fBlue++;
+				}
 
-            if ( matchPrim6( red, green, blue ) )
-            {
-               fRed++;
-            }
+				if ( matchPrim6( red, green, blue ) )
+				{
+				   fRed++;
+				}
+
+				if (!(matchPrim1(red, green, blue) || matchPrim3(red, green, blue) || matchPrim6(red, green, blue) || matchPrim2(red, green, blue)))
+				{
+					fOthers++;
+				}
 				
 			}
 			borderPixels += leftBorderPixels + rightBorderPixels;
@@ -230,12 +237,13 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		// Normalize the feature by the image size
 		fWhite -= borderPixels;
 
-		fOrange 	= fOrange / ( (int)img->height * (int)img->width - borderPixels);
+		fOrange = fOrange / ( (int)img->height * (int)img->width - borderPixels);
 		fWhite 	= fWhite  / ( (int)img->height * (int)img->width - borderPixels);
 		fGray  	= fGray   / ( (int)img->height * (int)img->width - borderPixels);
-		fGreen  	= fGreen  / ( (int)img->height * (int)img->width - borderPixels);
+		fGreen  = fGreen  / ( (int)img->height * (int)img->width - borderPixels);
 		fBlue  	= fBlue   / ( (int)img->height * (int)img->width - borderPixels);
-		fRed  	= fRed   / ( (int)img->height * (int)img->width - borderPixels);
+		fRed  	= fRed    / ( (int)img->height * (int)img->width - borderPixels);
+		fOthers = fOthers / ( (int)img->height * (int)img->width - borderPixels);
 
 		// Store the feature value in the columns of the feature (matrix) vector
 		fVector[iNum][1] = fOrange;
@@ -244,6 +252,8 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fVector[iNum][4] = fGreen;
 		fVector[iNum][5] = fBlue;
 		fVector[iNum][6] = fRed;
+		fVector[iNum][7] = fOthers;
+
 		
 		// Here you can add more features to your feature vector by filling the other columns: fVector[iNum][3] = ???; fVector[iNum][4] = ???;
 		
@@ -259,6 +269,9 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 		fprintf( fp, "%f,", fVector[iNum][5]);
         if (fileToGenerate > 0) {
             fprintf( fp, "%f,", fVector[iNum][6]);
+
+			if (fileToGenerate > 1)
+				fprintf(fp, "%f,", fVector[iNum][7]);
         }
 		
 		// IMPORTANT
