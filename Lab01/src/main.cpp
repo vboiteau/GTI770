@@ -58,6 +58,10 @@ int matchPrim6(unsigned char red, unsigned char green, unsigned char blue) {
 	return 254 <= red && red <= 255 && 0 <= green && green <= 1 && 0 <= blue && blue <= 1;
 }
 
+int matchOthers(unsigned char red, unsigned char green, unsigned char blue) {
+    return (!(matchPrim1(red, green, blue) || matchPrim3(red, green, blue) || matchPrim6(red, green, blue) || matchPrim2(red, green, blue)));
+}
+
 int matchBorder(unsigned char red, unsigned char green, unsigned char blue) {
 	return matchPrim2(red, green, blue);
 }
@@ -223,7 +227,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 				   fRed++;
 				}
 
-				if (!(matchPrim1(red, green, blue) || matchPrim3(red, green, blue) || matchPrim6(red, green, blue) || matchPrim2(red, green, blue)))
+				if ( matchOthers(red, green, blue) )
 				{
 					fOthers++;
 				}
