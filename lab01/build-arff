@@ -11,13 +11,13 @@ outputFolder="Output/"
 equipeNo="I"
 
 if [[ $1 == "HBL" ]];then
-    relation="$realtion-Lisa"
+    relation="$relation-Lisa"
     classes="$classes, Lisa"
     features="$features rouge"
 elif [[ $1 == "HBLO" ]];then
-    relation="$realtion-Lisa-Others"
+    relation="$relation-Lisa-Others"
     classes="$classes, Lisa, Others"
-    features="$features rouge"
+    features="$features rouge other"
 fi
 
 # 2) build header

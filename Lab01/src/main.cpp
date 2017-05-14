@@ -21,7 +21,7 @@
 
 // DEFINES
 #define NUM_SAMPLES 200
-#define NUM_FEATURES 7
+#define NUM_FEATURES 8
 
 // Bart Train: 80 items: bart1.bmp - bart80.bmp
 // Homer Train 62 items: homer1.bmp - homer62.bmp
