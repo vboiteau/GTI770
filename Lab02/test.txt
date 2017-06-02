@@ -1,0 +1,161 @@
+FilteredClassifier using weka.classifiers.trees.J48 -C 0.25 -M 2 on data filtered through weka.filters.supervised.attribute.Discretize -R first-last -precision 6
+
+Filtered Header
+@relation spam-dev-e16-weka.filters.supervised.instance.Resample-B1.0-S1-Z100.0-weka.filters.unsupervised.instance.Randomize-S42-weka.filters.unsupervised.instance.RemovePercentage-P50.0-V-weka.filters.supervised.attribute.Discretize-Rfirst-last-precision6
+
+@attribute word_freq_make: {'\'(-inf-0.065]\'','\'(0.065-inf)\''}
+@attribute word_freq_address: {'\'(-inf-0.015]\'','\'(0.015-2.445]\'','\'(2.445-inf)\''}
+@attribute word_freq_all: {'\'(-inf-0.135]\'','\'(0.135-1.355]\'','\'(1.355-inf)\''}
+@attribute word_freq_3d: {'\'(-inf-0.15]\'','\'(0.15-inf)\''}
+@attribute word_freq_our: {'\'(-inf-0.065]\'','\'(0.065-inf)\''}
+@attribute word_freq_over: {'\'(-inf-0.075]\'','\'(0.075-inf)\''}
+@attribute word_freq_remove: {'\'(-inf-0.01]\'','\'(0.01-inf)\''}
+@attribute word_freq_internet: {'\'(-inf-0.015]\'','\'(0.015-inf)\''}
+@attribute word_freq_order: {'\'(-inf-0.04]\'','\'(0.04-inf)\''}
+@attribute word_freq_mail: {'\'(-inf-0.045]\'','\'(0.045-inf)\''}
+@attribute word_freq_receive: {'\'(-inf-0.035]\'','\'(0.035-1.765]\'','\'(1.765-inf)\''}
+@attribute word_freq_will: {'\'(-inf-0.155]\'','\'(0.155-1.6]\'','\'(1.6-2.805]\'','\'(2.805-inf)\''}
+@attribute word_freq_people: {'\'(-inf-0.105]\'','\'(0.105-inf)\''}
+@attribute word_freq_report: {'\'(-inf-0.035]\'','\'(0.035-inf)\''}
+@attribute word_freq_addresses: {'\'(-inf-0.025]\'','\'(0.025-2.23]\'','\'(2.23-inf)\''}
+@attribute word_freq_free: {'\'(-inf-0.095]\'','\'(0.095-inf)\''}
+@attribute word_freq_business: {'\'(-inf-0.045]\'','\'(0.045-inf)\''}
+@attribute word_freq_email: {'\'(-inf-0.025]\'','\'(0.025-inf)\''}
+@attribute word_freq_you: {'\'(-inf-0.18]\'','\'(0.18-1.235]\'','\'(1.235-inf)\''}
+@attribute word_freq_credit: {'\'(-inf-0.02]\'','\'(0.02-inf)\''}
+@attribute word_freq_your: {'\'(-inf-0.405]\'','\'(0.405-inf)\''}
+@attribute word_freq_font: {'\'All\''}
+@attribute word_freq_000: {'\'(-inf-0.115]\'','\'(0.115-inf)\''}
+@attribute word_freq_money: {'\'(-inf-0.01]\'','\'(0.01-inf)\''}
+@attribute word_freq_hp: {'\'(-inf-0.22]\'','\'(0.22-0.685]\'','\'(0.685-inf)\''}
+@attribute word_freq_hpl: {'\'(-inf-0.22]\'','\'(0.22-inf)\''}
+@attribute word_freq_george: {'\'(-inf-0.01]\'','\'(0.01-inf)\''}
+@attribute word_freq_650: {'\'(-inf-0.03]\'','\'(0.03-inf)\''}
+@attribute word_freq_lab: {'\'(-inf-0.085]\'','\'(0.085-inf)\''}
+@attribute word_freq_labs: {'\'(-inf-0.185]\'','\'(0.185-inf)\''}
+@attribute word_freq_telnet: {'\'(-inf-0.075]\'','\'(0.075-inf)\''}
+@attribute word_freq_857: {'\'(-inf-0.075]\'','\'(0.075-inf)\''}
+@attribute word_freq_data: {'\'(-inf-0.535]\'','\'(0.535-inf)\''}
+@attribute word_freq_415: {'\'(-inf-0.145]\'','\'(0.145-inf)\''}
+@attribute word_freq_85: {'\'(-inf-0.205]\'','\'(0.205-inf)\''}
+@attribute word_freq_technology: {'\'(-inf-0.455]\'','\'(0.455-inf)\''}
+@attribute word_freq_1999: {'\'(-inf-0.03]\'','\'(0.03-inf)\''}
+@attribute word_freq_parts: {'\'All\''}
+@attribute word_freq_pm: {'\'(-inf-0.205]\'','\'(0.205-inf)\''}
+@attribute word_freq_direct: {'\'All\''}
+@attribute word_freq_cs: {'\'(-inf-0.035]\'','\'(0.035-inf)\''}
+@attribute word_freq_meeting: {'\'(-inf-0.465]\'','\'(0.465-inf)\''}
+@attribute word_freq_original: {'\'(-inf-0.53]\'','\'(0.53-inf)\''}
+@attribute word_freq_project: {'\'(-inf-0.445]\'','\'(0.445-inf)\''}
+@attribute word_freq_re: {'\'(-inf-1.54]\'','\'(1.54-inf)\''}
+@attribute word_freq_edu: {'\'(-inf-0.105]\'','\'(0.105-inf)\''}
+@attribute word_freq_table: {'\'All\''}
+@attribute word_freq_conference: {'\'(-inf-0.27]\'','\'(0.27-inf)\''}
+@attribute char_freq_;: {'\'All\''}
+@attribute char_freq_(: {'\'(-inf-0.02]\'','\'(0.02-0.1105]\'','\'(0.1105-0.2775]\'','\'(0.2775-inf)\''}
+@attribute char_freq_[: {'\'(-inf-0.088]\'','\'(0.088-0.156]\'','\'(0.156-inf)\''}
+@attribute char_freq_!: {'\'(-inf-0.0525]\'','\'(0.0525-0.4045]\'','\'(0.4045-inf)\''}
+@attribute char_freq_$: {'\'(-inf-0.02]\'','\'(0.02-0.0545]\'','\'(0.0545-inf)\''}
+@attribute char_freq_#: {'\'(-inf-0.0075]\'','\'(0.0075-0.0345]\'','\'(0.0345-inf)\''}
+@attribute capital_run_length_average: {'\'(-inf-1.2045]\'','\'(1.2045-2.253]\'','\'(2.253-3.529]\'','\'(3.529-inf)\''}
+@attribute capital_run_length_longest: {'\'(-inf-5.5]\'','\'(5.5-18.5]\'','\'(18.5-55.5]\'','\'(55.5-inf)\''}
+@attribute capital_run_length_total: {'\'(-inf-14.5]\'','\'(14.5-60.5]\'','\'(60.5-157.5]\'','\'(157.5-inf)\''}
+@attribute class {1,0}
+
+@data
+
+
+Classifier Model
+J48 pruned tree
+------------------
+
+word_freq_remove: = '(-inf-0.01]'
+|   char_freq_$: = '(-inf-0.02]'
+|   |   word_freq_free: = '(-inf-0.095]'
+|   |   |   char_freq_!: = '(-inf-0.0525]'
+|   |   |   |   word_freq_george: = '(-inf-0.01]'
+|   |   |   |   |   capital_run_length_average: = '(-inf-1.2045]': 0 (77.0/3.0)
+|   |   |   |   |   capital_run_length_average: = '(1.2045-2.253]': 0 (209.0/4.0)
+|   |   |   |   |   capital_run_length_average: = '(2.253-3.529]'
+|   |   |   |   |   |   word_freq_over: = '(-inf-0.075]'
+|   |   |   |   |   |   |   word_freq_internet: = '(-inf-0.015]'
+|   |   |   |   |   |   |   |   word_freq_address: = '(-inf-0.015]': 0 (51.0/3.0)
+|   |   |   |   |   |   |   |   word_freq_address: = '(0.015-2.445]'
+|   |   |   |   |   |   |   |   |   word_freq_1999: = '(-inf-0.03]': 1 (3.0)
+|   |   |   |   |   |   |   |   |   word_freq_1999: = '(0.03-inf)': 0 (5.0)
+|   |   |   |   |   |   |   |   word_freq_address: = '(2.445-inf)': 0 (0.0)
+|   |   |   |   |   |   |   word_freq_internet: = '(0.015-inf)': 1 (3.0/1.0)
+|   |   |   |   |   |   word_freq_over: = '(0.075-inf)'
+|   |   |   |   |   |   |   word_freq_hp: = '(-inf-0.22]': 1 (6.0)
+|   |   |   |   |   |   |   word_freq_hp: = '(0.22-0.685]': 1 (0.0)
+|   |   |   |   |   |   |   word_freq_hp: = '(0.685-inf)': 0 (2.0)
+|   |   |   |   |   capital_run_length_average: = '(3.529-inf)'
+|   |   |   |   |   |   word_freq_hp: = '(-inf-0.22]'
+|   |   |   |   |   |   |   word_freq_receive: = '(-inf-0.035]'
+|   |   |   |   |   |   |   |   capital_run_length_total: = '(-inf-14.5]': 0 (1.0)
+|   |   |   |   |   |   |   |   capital_run_length_total: = '(14.5-60.5]'
+|   |   |   |   |   |   |   |   |   word_freq_make: = '(-inf-0.065]': 0 (7.0/1.0)
+|   |   |   |   |   |   |   |   |   word_freq_make: = '(0.065-inf)': 1 (2.0)
+|   |   |   |   |   |   |   |   capital_run_length_total: = '(60.5-157.5]': 1 (11.0)
+|   |   |   |   |   |   |   |   capital_run_length_total: = '(157.5-inf)': 1 (5.0/2.0)
+|   |   |   |   |   |   |   word_freq_receive: = '(0.035-1.765]': 1 (0.0)
+|   |   |   |   |   |   |   word_freq_receive: = '(1.765-inf)': 0 (4.0)
+|   |   |   |   |   |   word_freq_hp: = '(0.22-0.685]': 0 (1.0)
+|   |   |   |   |   |   word_freq_hp: = '(0.685-inf)': 0 (10.0)
+|   |   |   |   word_freq_george: = '(0.01-inf)': 0 (154.0)
+|   |   |   char_freq_!: = '(0.0525-0.4045]'
+|   |   |   |   word_freq_internet: = '(-inf-0.015]': 0 (90.0/12.0)
+|   |   |   |   word_freq_internet: = '(0.015-inf)'
+|   |   |   |   |   word_freq_hp: = '(-inf-0.22]': 1 (5.0)
+|   |   |   |   |   word_freq_hp: = '(0.22-0.685]': 1 (0.0)
+|   |   |   |   |   word_freq_hp: = '(0.685-inf)': 0 (3.0)
+|   |   |   char_freq_!: = '(0.4045-inf)'
+|   |   |   |   word_freq_george: = '(-inf-0.01]'
+|   |   |   |   |   word_freq_project: = '(-inf-0.445]'
+|   |   |   |   |   |   word_freq_will: = '(-inf-0.155]'
+|   |   |   |   |   |   |   word_freq_re: = '(-inf-1.54]': 1 (39.0/8.0)
+|   |   |   |   |   |   |   word_freq_re: = '(1.54-inf)': 0 (2.0)
+|   |   |   |   |   |   word_freq_will: = '(0.155-1.6]': 1 (6.0/2.0)
+|   |   |   |   |   |   word_freq_will: = '(1.6-2.805]': 0 (4.0/1.0)
+|   |   |   |   |   |   word_freq_will: = '(2.805-inf)': 0 (4.0)
+|   |   |   |   |   word_freq_project: = '(0.445-inf)': 0 (3.0)
+|   |   |   |   word_freq_george: = '(0.01-inf)': 0 (5.0)
+|   |   word_freq_free: = '(0.095-inf)'
+|   |   |   word_freq_george: = '(-inf-0.01]'
+|   |   |   |   word_freq_edu: = '(-inf-0.105]'
+|   |   |   |   |   word_freq_1999: = '(-inf-0.03]'
+|   |   |   |   |   |   word_freq_our: = '(-inf-0.065]'
+|   |   |   |   |   |   |   char_freq_!: = '(-inf-0.0525]': 0 (12.0/2.0)
+|   |   |   |   |   |   |   char_freq_!: = '(0.0525-0.4045]': 1 (13.0/2.0)
+|   |   |   |   |   |   |   char_freq_!: = '(0.4045-inf)': 1 (10.0)
+|   |   |   |   |   |   word_freq_our: = '(0.065-inf)': 1 (54.0/2.0)
+|   |   |   |   |   word_freq_1999: = '(0.03-inf)'
+|   |   |   |   |   |   word_freq_will: = '(-inf-0.155]': 1 (3.0)
+|   |   |   |   |   |   word_freq_will: = '(0.155-1.6]': 0 (7.0)
+|   |   |   |   |   |   word_freq_will: = '(1.6-2.805]': 0 (1.0)
+|   |   |   |   |   |   word_freq_will: = '(2.805-inf)': 0 (3.0)
+|   |   |   |   word_freq_edu: = '(0.105-inf)': 0 (9.0/1.0)
+|   |   |   word_freq_george: = '(0.01-inf)': 0 (7.0)
+|   char_freq_$: = '(0.02-0.0545]'
+|   |   word_freq_money: = '(-inf-0.01]'
+|   |   |   word_freq_credit: = '(-inf-0.02]': 0 (16.0/2.0)
+|   |   |   word_freq_credit: = '(0.02-inf)': 1 (3.0)
+|   |   word_freq_money: = '(0.01-inf)': 1 (13.0)
+|   char_freq_$: = '(0.0545-inf)'
+|   |   word_freq_hp: = '(-inf-0.22]'
+|   |   |   word_freq_edu: = '(-inf-0.105]': 1 (208.0/3.0)
+|   |   |   word_freq_edu: = '(0.105-inf)'
+|   |   |   |   word_freq_all: = '(-inf-0.135]': 0 (6.0)
+|   |   |   |   word_freq_all: = '(0.135-1.355]': 1 (4.0)
+|   |   |   |   word_freq_all: = '(1.355-inf)': 0 (0.0)
+|   |   word_freq_hp: = '(0.22-0.685]'
+|   |   |   word_freq_make: = '(-inf-0.065]': 0 (3.0)
+|   |   |   word_freq_make: = '(0.065-inf)': 1 (5.0/1.0)
+|   |   word_freq_hp: = '(0.685-inf)': 0 (6.0)
+word_freq_remove: = '(0.01-inf)'
+|   word_freq_george: = '(-inf-0.01]': 1 (282.0/4.0)
+|   word_freq_george: = '(0.01-inf)': 0 (3.0)
+
+Number of Leaves  : 	53
+
+Size of the tree : 	87
