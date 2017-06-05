@@ -159,3 +159,12 @@ word_freq_remove: = '(0.01-inf)'
 Number of Leaves  : 	53
 
 Size of the tree : 	87
+
+Correctly Classified Instances         701               50.7971 %
+Incorrectly Classified Instances       679               49.2029 %
+Kappa statistic                          0     
+Mean absolute error                      0.4927
+Root mean squared error                  0.6747
+Relative absolute error                 98.555  %
+Root relative squared error            134.9552 %
+Total Number of Instances             1380     

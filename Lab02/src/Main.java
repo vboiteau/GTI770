@@ -13,12 +13,15 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            DataSource source = new DataSource("spambase-valid.arff");
+            for (int i = 0; i < args.length; i++) {
+                System.out.printf("%d: %s\n", i, args[i]) ;
+            }
+            DataSource source = new DataSource(args[0]);
             Instances data = source.getDataSet();
 
             data.setClassIndex(data.numAttributes() - 1);
 
-            PrintWriter output = new PrintWriter("test.txt");
+            PrintWriter output = new PrintWriter(args[1]);
             output.print(arbreDecision(data, false));
             output.close();
         }
