@@ -19,7 +19,8 @@ public class Main {
 
     static String OUTPUT_DIR = "output";
     static String EVAL_DIR = OUTPUT_DIR + "/evals";
-    //private ArrayList<Number> 
+    private ArrayList<int> cuts = {100, 50, 25, 25, 25};
+    private ArrayList<int> noises = {0, 0, 0, 5, 20};
 
     public static void main(String[] args) {
         try {
@@ -27,6 +28,9 @@ public class Main {
                 System.out.printf("%d: %s\n", i, args[i]) ;
             }
             new File(EVAL_DIR).mkdirs();
+            for (int i = 0; i < cuts.length; i++) {
+                
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
