@@ -12,7 +12,7 @@ import java.io.File;
 
 class ObservationSet {
     public int cut;
-    public int noise
+    public int noise;
 }
 
 public class Main {
