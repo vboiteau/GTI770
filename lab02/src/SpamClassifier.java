@@ -4,6 +4,7 @@ import weka.classifiers.lazy.IBk;
 import weka.classifiers.trees.J48;
 import weka.core.Instance;
 import weka.core.Instances;
+import weka.core.SerializationHelper;
 
 import java.io.*;
 
@@ -11,16 +12,17 @@ public class SpamClassifier {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1) throw new RuntimeException ("File name is required.");
-        new SpamClassifier(args[0]);
+        new SpamClassifier(args[0], args[1], args[2]);
     }
 
-    private SpamClassifier(String filename) {
+    private SpamClassifier(String fileNameData, String fileNamePlus, String fileNameMoins) {
 
         Thread th1 = new Thread(() -> {
             try {
-                J48 algo = new J48();
-                algo.setUnpruned(false);
-                runAlgorithm(algo, filename, "EquipeI-plus.txt");
+                //J48 algo = new J48();
+                //algo.setUnpruned(false);
+                Classifier j48Classifier  =  (J48) SerializationHelper.read("best.model");
+                runAlgorithm(j48Classifier, fileNameData, fileNamePlus);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -29,7 +31,8 @@ public class SpamClassifier {
 
         Thread th2 = new Thread(() -> {
             try {
-                runAlgorithm(new NaiveBayes(), filename, "EquipeI-moins.txt");
+                Classifier bayesClassifier  =  (NaiveBayes) SerializationHelper.read("worst.model");
+                runAlgorithm(bayesClassifier, fileNameData, fileNameMoins);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -38,7 +41,7 @@ public class SpamClassifier {
 
         Thread th3 = new Thread(() -> {
             try {
-                runAlgorithm(new IBk(), filename, "EquipeI-ibk.txt");
+                runAlgorithm(new IBk(), fileNameData, "EquipeI-ibk.txt");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -67,7 +70,7 @@ public class SpamClassifier {
             int attributeIndex = data.numAttributes() - 1;
             data.setClassIndex(attributeIndex);
 
-            classifier.buildClassifier(data);
+            //classifier.buildClassifier(data);
 
             for (Instance instance : data) {
                 double c = classifier.classifyInstance(instance);
