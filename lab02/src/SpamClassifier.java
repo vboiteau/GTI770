@@ -16,6 +16,7 @@ public class SpamClassifier {
     }
 
     private SpamClassifier(String fileNameData, String fileNamePlus, String fileNameMoins) {
+        System.out.println("Starting classifiers in parallel");
 
         Thread th1 = new Thread(() -> {
             try {
@@ -26,6 +27,7 @@ public class SpamClassifier {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println("Execution of J48 ended");
         });
         th1.run();
 
@@ -36,6 +38,7 @@ public class SpamClassifier {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println("Execution of NaiveBayes ended");
         });
         th2.run();
 
