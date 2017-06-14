@@ -5,7 +5,7 @@ let [,algo, ...args] = path.split('/');
 let filename = args.pop();
 let [,cut=100,noise=0] = filename.match(/spambase-train([\d]*)?-?(\d*)?/);
 fs.readFile(path, {encoding: 'utf8'}, (err, content) => {
-    let [start, end] = content.split("=== Stratified cross-validation ===\n");
+    let [start, end] = content.split("=== Error on test data ===\n");
     let [summary, details] = end.split("=== Detailed Accuracy By Class ===\n");
     summary = summary.match(/(\d+\.?\d*)/g).map(n => Number(n));
     let [, success,, error] = summary;
