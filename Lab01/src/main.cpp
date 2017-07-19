@@ -74,7 +74,8 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 							 FILE *fp,
 							 IplImage *img,
 							 IplImage *processed,
-                             int fileToGenerate)
+                             int fileToGenerate,
+                             int offset)
 {
 	// OpenCV variables related to the image structure.
 	// IplImage structure contains several information of the image (See OpenCV manual).	
@@ -110,7 +111,7 @@ void processCharacter(float fVector[ NUM_SAMPLES ][ NUM_FEATURES ],
 	for ( iNum = 1; iNum <= count; iNum++ )
 	{
 		// Build the image filename and path to read from disk
-		sprintf ( cFileName, cImageName, (int)(iNum) );
+		sprintf ( cFileName, cImageName, (int)(iNum+offset) );
 		//sprintf ( cFileName, "Valid/homer%d.bmp", (int)(iNum) ); 
 		//printf ( " %s\n", cFileName);
 
@@ -358,7 +359,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fTrain, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Train/homer%d.bmp", "Homer", 62, fTrain, img, processed, fileToGenerate, 0);
 	
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -371,7 +372,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fTrain, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Train/bart%d.bmp", "Bart", 80, fTrain, img, processed, fileToGenerate, 0);
 
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -385,7 +386,7 @@ int main( int argc, char** argv )
 
 	// Take all the image files at the range
     if (fileToGenerate > 0) {
-        processCharacter(fVector, cFileName, "Train/lisa%d.bmp", "Lisa", 33, fTrain, img, processed, fileToGenerate);
+        processCharacter(fVector, cFileName, "Train/lisa%d.bmp", "Lisa", 33, fTrain, img, processed, fileToGenerate, 0);
     }
     // *****************************************************************************************************************************************
     // *****************************************************************************************************************************************
@@ -399,7 +400,7 @@ int main( int argc, char** argv )
 
     // Take all the image files at the range
     if (fileToGenerate == 2) {
-        processCharacter(fVector, cFileName, "Train/other%d.bmp", "Others", 121, fTrain, img, processed, fileToGenerate);
+        processCharacter(fVector, cFileName, "Train/other%d.bmp", "Others", 121, fTrain, img, processed, fileToGenerate, 0);
     }
 
     cvReleaseImage(&img);
@@ -432,7 +433,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Valid/homer%d.bmp", "Homer", 37, fValidation, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Valid/homer%d.bmp", "Homer", 37, fValidation, img, processed, fileToGenerate, 87);
 	
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -445,7 +446,7 @@ int main( int argc, char** argv )
 	// *****************************************************************************************************************************************
 
 	// Take all the image files at the range
-	processCharacter(fVector, cFileName, "Valid/bart%d.bmp", "Bart", 54, fValidation, img, processed, fileToGenerate);
+	processCharacter(fVector, cFileName, "Valid/bart%d.bmp", "Bart", 54, fValidation, img, processed, fileToGenerate, 115);
 
 	// *****************************************************************************************************************************************
 	// *****************************************************************************************************************************************
@@ -459,7 +460,7 @@ int main( int argc, char** argv )
 
 	// Take all the image files at the range
     if (fileToGenerate > 0) {
-        processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fValidation, img, processed, fileToGenerate);
+        processCharacter(fVector, cFileName, "Valid/lisa%d.bmp", "Lisa", 13, fValidation, img, processed, fileToGenerate, 33);
     }
     // *****************************************************************************************************************************************
     // VALIDATION SAMPLES 
@@ -471,7 +472,7 @@ int main( int argc, char** argv )
 
     // Take all the image files at the range
     if (fileToGenerate == 2) {
-        processCharacter(fVector, cFileName, "Valid/other%d.bmp", "Others", 49, fValidation, img, processed, fileToGenerate);
+        processCharacter(fVector, cFileName, "Valid/other%d.bmp", "Others", 49, fValidation, img, processed, fileToGenerate, 121);
     }
 
     cvReleaseImage(&img);

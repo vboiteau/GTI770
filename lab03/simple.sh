@@ -1,22 +1,27 @@
 #!/bin/bash
 source ./config.sh
-TRAIN_FILE="./arff/Char_UpperLower52.train.arff"
+
+HiddenLayer=80
 if [ -z $1 ]; then
-    echo "First parameter should be the train file, will use default $TRAIN_FILE"
+    echo "First parameter should be hidden layers, will use default $HiddenLayer"
 else
-    TRAIN_FILE=$1
+    HiddenLayer=$1
 fi
 
-TEST_FILE="./arff/Char_UpperLower52.test.arff"
+Cycle=1000
 if [ -z $2 ]; then
-    echo "Second parameter should be the test file, will use default $TEST_FILE"
+    echo "Second parameter should be cycle, will use default $Cycle" 
 else
-    TEST_FILE=$2
+    Cycle=$2
 fi
 
-OUTPUT_NAME="test"
+TRAIN_FILE="./arff/Char_UpperLower52.train.arff"
+
+TEST_FILE="./arff/Char_UpperLower52.val.arff"
+
+OUTPUT_NAME="test_H${HiddenLayer}_N${Cycle}"
 if [ -z $3 ]; then
-    echo "Third parameter should be the output name without extension, will use default $OUTPUT_NAME."
+    echo "Second parameter should be the output name without extension, will use default $OUTPUT_NAME."
 else
     OUTPUT_NAME=$3
 fi
@@ -24,6 +29,5 @@ fi
 
 classifier="functions.MultilayerPerceptron"
 
-arguments="-N 1000 -H \"108,80,52\" -t $TRAIN_FILE -T $TEST_FILE -d $OUTPUT_NAME.model"
-
-eval "java -cp $WEKA_JAR weka.classifiers.${classifier} $arguments > $OUTPUT_NAME.txt"
+arguments="-L 0.3 -M 0.2 -S 0 -E 20 -N $Cycle -H $HiddenLayer -t $TRAIN_FILE -T $TEST_FILE -d output/$OUTPUT_NAME.model"
+eval "java -cp $WEKA_JAR weka.classifiers.${classifier} $arguments > output/$OUTPUT_NAME.txt"

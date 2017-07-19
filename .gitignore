@@ -423,5 +423,6 @@ fabric.properties
 
 # Sonarlint plugin
 .idea/sonarlint
+*.bmp
 
 # End of https://www.gitignore.io/api/intellij
