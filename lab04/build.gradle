@@ -42,5 +42,5 @@ jar {
             'Main-Class': 'Single'
        ) 
     }
-    archiveName =  'EquipeI_lab04_eval.jar'
+    archiveName =  'single.jar'
 }
