@@ -1,8 +1,5 @@
 import weka.classifiers.Classifier;
 import weka.core.Instance;
-import weka.core.SerializationHelper;
-
-import java.io.File;
 
 /**
  * Created by lodonoughue on 2017-08-02.
@@ -15,7 +12,6 @@ class Multi implements Strategy {
         Strategy str = new Multi(lab);
         lab.execute(args[0], args[1], str);
     }
-
 
     private Lab lab;
     private Classifier knnClassifier;
