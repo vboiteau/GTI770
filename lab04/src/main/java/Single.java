@@ -14,7 +14,9 @@ import java.io.PrintWriter;
 public class Single implements Strategy {
 
     public static void main(String[] args) throws Exception {
-        new Lab(args[0], args[1], new Single());
+        Lab lab = new Lab();
+        Strategy str = new Single();
+        lab.execute(args[0], args[1], str);
     }
 
     @Override

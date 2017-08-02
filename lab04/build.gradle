@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     compile group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.0'
+    compile group: 'nz.ac.waikato.cms.weka', name: 'LibSVM', version: '1.0.4'
 }
 
 run {
