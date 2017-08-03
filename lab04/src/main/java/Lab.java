@@ -1,31 +1,48 @@
 import weka.classifiers.Classifier;
 import weka.core.Attribute;
-import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.SerializationHelper;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Normalize;
 import weka.filters.unsupervised.attribute.Remove;
-import weka.filters.unsupervised.attribute.Standardize;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.lang.String;
 import java.net.URL;
-import java.util.Arrays;
 
 
-class Lab {
+class Lab implements Batch.Observer {
 
-    void execute(String input, String output, Strategy strategy) throws Exception {
+    private static final int NUM_THREADS = 6;
+
+    private Attribute classAttribute;
+    private int totalCount;
+
+
+    void execute(String input, String output, ClassificationStrategy strategy) throws Exception {
+        this.totalCount = 0;
         strategy.loadModel();
         Instances instances = load(input);
         if (instances != null) {
-            for (Instance instance : instances) {
-                write(output, strategy.classify(instance));
+
+            String[] classNames = new String[instances.size()];
+            Thread[] threads = new Thread[NUM_THREADS];
+            Batch[] batches = splitInstances(instances, strategy, NUM_THREADS);
+
+            for (int i = 0; i < threads.length; i++) {
+                threads[i] = new Thread(batches[i]);
+                threads[i].start();
             }
+
+            for (Thread thread : threads) {
+                thread.join();
+            }
+
+            for (Batch batch : batches) {
+                batch.fillClassNames(classNames);
+            }
+
+            write(output, classNames);
         }
     }
 
@@ -41,6 +58,33 @@ class Lab {
         return (Classifier) SerializationHelper.read(path);
     }
 
+    String getClassName(int value) {
+        String className = null;
+        if (this.classAttribute != null) {
+            className = this.classAttribute.value(value);
+        }
+        return className;
+    }
+
+    @Override
+    public synchronized void instanceClassified(int count) {
+        this.totalCount += count;
+        System.out.format("%d instances classified.\n", this.totalCount);
+    }
+
+    private Batch[] splitInstances(Instances instances, ClassificationStrategy strategy, int number) {
+        Batch[] batches = new Batch[number];
+        int batchSize = instances.size() / number;
+
+        int index;
+        for (index = 0; index < batches.length; index++) {
+            batches[index] = new Batch(instances, strategy, index, batchSize);
+            batches[index].setObserver(this);
+        }
+
+        return batches;
+    }
+
     private Instances load(String input) throws Exception {
         Reader reader = null;
         Instances instances;
@@ -48,6 +92,7 @@ class Lab {
 
             reader = new BufferedReader(new FileReader(input));
             instances = new Instances(reader);
+            cacheClassAttribute(instances);
 
         } finally {
             if (reader != null) {
@@ -59,15 +104,16 @@ class Lab {
 
     private Instances normalize(Instances instances) throws Exception {
         if (instances != null) {
-            int[] rmIndices = getAttributeIndices(instances, new String[] {"SAMPLEID", "TRACKID", "class"});
+            int[] rmIndices = getAttributeIndices(instances, new String[] {"SAMPLEID", "TRACKID"});
 
             Remove rm = new Remove();
             rm.setAttributeIndicesArray(rmIndices);
             rm.setInputFormat(instances);
             instances = Filter.useFilter(instances, rm);
 
-            Standardize norm = new Standardize();
-            norm.setOptions(new String[] {"-S 2.0", "-T -1.0"});
+            Normalize norm = new Normalize();
+            norm.setScale(2.0);
+            norm.setTranslation(-1.0);
             norm.setInputFormat(instances);
             instances = Filter.useFilter(instances, norm);
         }
@@ -99,7 +145,24 @@ class Lab {
         return indices;
     }
 
-    private void write(String ouput, String className) throws IOException {
+    private void cacheClassAttribute(Instances instances) {
+        this.classAttribute = instances.attribute("class");
+        instances.setClass(this.classAttribute);
+    }
 
+    private void write(String output, String[] classNames) throws IOException {
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(output));
+            for (String className: classNames) {
+                writer.write(className);
+                writer.newLine();
+            }
+
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
     }
 }

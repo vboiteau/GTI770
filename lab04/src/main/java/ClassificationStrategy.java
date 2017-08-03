@@ -1,13 +1,12 @@
 import weka.core.Instance;
 
-import java.io.IOException;
 
 /**
  * Created by lodonoughue on 2017-08-02.
  */
-interface Strategy {
+interface ClassificationStrategy {
 
     void loadModel() throws Exception;
-    String classify(Instance instance);
+    String classify(Instance instance) throws Exception;
 
 }
