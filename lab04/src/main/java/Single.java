@@ -2,23 +2,31 @@
  * Created by Olivier on 2017-06-02.
  */
 
+import weka.classifiers.Classifier;
 import weka.core.Instance;
 
 class Single implements ClassificationStrategy {
 
     public static void main(String[] args) throws Exception {
         Lab lab = new Lab();
-        ClassificationStrategy str = new Single();
+        ClassificationStrategy str = new Single(lab);
         lab.execute(args[0], args[1], str);
     }
 
-    @Override
-    public void loadModel() {
+    private Lab lab;
+    private Classifier classifier;
 
+    private Single(Lab lab) {
+        this.lab = lab;
     }
 
     @Override
-    public String classify(Instance instance) {
-        return null;
+    public void loadModel() throws Exception {
+        classifier = lab.loadClassifier("single.model");
+    }
+
+    @Override
+    public String classify(Instance instance) throws Exception {
+        return lab.getClassName((int)classifier.classifyInstance(instance));
     }
 }
