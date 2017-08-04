@@ -17,7 +17,11 @@ const processLine = ([, expected,,,...distribution]) => {
 let maximumValue = 0;
 
 const processCSV = csv => {
-    maximumValue = csv.split('\n').length;
+    maximumValue = csv
+        .split('\n')
+        .filter(isDistributionLine)
+        .length;
+
     return csv
         .split('\n')
         .filter(isDistributionLine)
