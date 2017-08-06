@@ -4,13 +4,15 @@
 
 import weka.classifiers.Classifier;
 import weka.core.Instance;
+import weka.core.Instances;
 
 class Single implements ClassificationStrategy {
 
     public static void main(String[] args) throws Exception {
         Lab lab = new Lab();
         ClassificationStrategy str = new Single(lab);
-        lab.execute(args[0], args[1], str);
+        str.classify(null);
+        //lab.execute(args[0], args[1], str);
     }
 
     private Lab lab;
@@ -26,7 +28,8 @@ class Single implements ClassificationStrategy {
     }
 
     @Override
-    public String classify(Instance instance) throws Exception {
+    public synchronized String classify(Instance instance) throws Exception {
+
         return lab.getClassName((int)classifier.classifyInstance(instance));
     }
 }

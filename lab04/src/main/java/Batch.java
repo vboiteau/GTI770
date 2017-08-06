@@ -1,3 +1,4 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import weka.core.Instances;
 
 /**
@@ -10,6 +11,7 @@ class Batch implements Runnable {
     private final int startIndex;
     private final int size;
     private final String[] classNames;
+    private final String[] currentClassNames;
     private Observer observer;
 
     Batch(Instances instances, ClassificationStrategy strategy, int index, int batchSize) {
@@ -22,6 +24,8 @@ class Batch implements Runnable {
         }
 
         this.classNames = new String[this.size];
+        this.currentClassNames = new String[this.size];
+
         this.instances = new Instances(instances, this.startIndex, this.size);
         this.strategy = strategy;
     }
@@ -32,6 +36,7 @@ class Batch implements Runnable {
             int count = 0;
             for (int i = 0; i < this.classNames.length; i++) {
                 this.classNames[i] = this.strategy.classify(this.instances.get(i));
+                this.currentClassNames[i] = instances.classAttribute().value((int)instances.get(i).classValue());
                 count++;
 
                 if (this.observer != null && (i + 1) % 500 == 0) {
@@ -54,6 +59,19 @@ class Batch implements Runnable {
 
     void fillClassNames(String[] classNames) {
         System.arraycopy(this.classNames, 0, classNames, this.startIndex, this.size);
+    }
+
+    public int getAccurracy() {
+
+        int count = 0;
+
+        for (int i = 0; i < this.size; i++)
+        {
+            if (this.classNames[i].equals(this.currentClassNames[i]))
+                count++;
+        }
+
+        return count;
     }
 
     interface Observer {

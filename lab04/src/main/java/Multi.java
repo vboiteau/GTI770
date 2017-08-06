@@ -1,6 +1,8 @@
 import weka.classifiers.Classifier;
 import weka.core.Instance;
 
+import java.util.Arrays;
+
 /**
  * Created by lodonoughue on 2017-08-02.
  */
@@ -9,7 +11,7 @@ class Multi implements ClassificationStrategy {
 
     public static void main(String[] args) throws Exception {
         Lab lab = new Lab();
-        ClassificationStrategy str = new Multi(lab, new SumCombinationStrategy());
+        ClassificationStrategy str = new Multi(lab, new MaxCombinationStrategy());
         lab.execute(args[0], args[1], str);
     }
 

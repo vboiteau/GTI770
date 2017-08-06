@@ -13,7 +13,7 @@ import java.net.URL;
 
 class Lab implements Batch.Observer {
 
-    private static final int NUM_THREADS = 6;
+    private static final int NUM_THREADS = 1;
 
     private Attribute classAttribute;
     private int totalCount;
@@ -41,6 +41,8 @@ class Lab implements Batch.Observer {
             for (Batch batch : batches) {
                 batch.fillClassNames(classNames);
             }
+
+            System.out.println( ((double)batches[0].getAccurracy()/(double)instances.numInstances())*100 );
 
             write(output, classNames);
         }
@@ -85,7 +87,7 @@ class Lab implements Batch.Observer {
         return batches;
     }
 
-    private Instances load(String input) throws Exception {
+    public Instances load(String input) throws Exception {
         Reader reader = null;
         Instances instances;
         try {
