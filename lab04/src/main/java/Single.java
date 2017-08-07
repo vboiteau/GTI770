@@ -11,8 +11,7 @@ class Single implements ClassificationStrategy {
     public static void main(String[] args) throws Exception {
         Lab lab = new Lab();
         ClassificationStrategy str = new Single(lab);
-        str.classify(null);
-        //lab.execute(args[0], args[1], str);
+        lab.execute(args[0], args[1], str);
     }
 
     private Lab lab;
