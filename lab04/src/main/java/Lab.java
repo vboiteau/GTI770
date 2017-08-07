@@ -29,6 +29,7 @@ class Lab implements Batch.Observer {
             Thread[] threads = new Thread[NUM_THREADS];
             Batch[] batches = splitInstances(instances, strategy, NUM_THREADS);
 
+            System.out.format("Starting classification on %d threads.\n", NUM_THREADS);
             for (int i = 0; i < threads.length; i++) {
                 threads[i] = new Thread(batches[i]);
                 threads[i].start();
