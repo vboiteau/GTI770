@@ -26,24 +26,13 @@ class Lab implements Batch.Observer {
         if (instances != null) {
 
             String[] classNames = new String[instances.size()];
-            Thread[] threads = new Thread[NUM_THREADS];
-            Batch[] batches = splitInstances(instances, strategy, NUM_THREADS);
+            Batch batch = splitInstances(instances, strategy, NUM_THREADS);
 
             System.out.format("Starting classification on %d threads.\n", NUM_THREADS);
-            for (int i = 0; i < threads.length; i++) {
-                threads[i] = new Thread(batches[i]);
-                threads[i].start();
-            }
+            batch.run();
+            batch.fillClassNames(classNames);
 
-            for (Thread thread : threads) {
-                thread.join();
-            }
-
-            for (Batch batch : batches) {
-                batch.fillClassNames(classNames);
-            }
-
-            System.out.println( ((double)batches[0].getAccurracy()/(double)instances.numInstances())*100 );
+            System.out.println( ((double)batch.getAccurracy()/(double)instances.numInstances())*100 );
 
             write(output, classNames);
         }
@@ -71,17 +60,14 @@ class Lab implements Batch.Observer {
         System.out.format("%d instances classified.\n", this.totalCount);
     }
 
-    private Batch[] splitInstances(Instances instances, ClassificationStrategy strategy, int number) {
-        Batch[] batches = new Batch[number];
+    private Batch splitInstances(Instances instances, ClassificationStrategy strategy, int number) {
+        Batch batch;
         int batchSize = instances.size() / number;
 
-        int index;
-        for (index = 0; index < batches.length; index++) {
-            batches[index] = new Batch(instances, strategy, index, batchSize);
-            batches[index].setObserver(this);
-        }
+        batch = new Batch(instances, strategy, 0, batchSize);
+        batch.setObserver(this);
 
-        return batches;
+        return batch;
     }
 
     public Instances load(String input) throws Exception {

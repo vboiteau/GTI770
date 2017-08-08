@@ -3,7 +3,7 @@ import weka.core.Instances;
 /**
  * Created by lodonoughue on 2017-08-02.
  */
-class Batch implements Runnable {
+class Batch {
 
     private final Instances instances;
     private final ClassificationStrategy strategy;
@@ -29,7 +29,6 @@ class Batch implements Runnable {
         this.strategy = strategy;
     }
 
-    @Override
     public void run() {
         try {
             int count = 0;
