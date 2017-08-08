@@ -50,15 +50,11 @@ class Lab implements Batch.Observer {
     }
 
     Classifier loadClassifier(String filename) throws Exception {
-        ClassLoader classloader = getClass().getClassLoader();
-        URL fileUrl = classloader.getResource(filename);
-        String path = null;
+        System.out.println("Loading classifier model '" + filename + "'.");
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(filename);
 
-        if (fileUrl != null) {
-            path = fileUrl.getFile();
-        }
-
-        return (Classifier) SerializationHelper.read(path);
+        return (Classifier) SerializationHelper.read(is);
     }
 
     String getClassName(int value) {
